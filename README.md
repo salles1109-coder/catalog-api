@@ -36,8 +36,14 @@ O sistema possui integração total entre API e Frontend, com controle de acesso
 
 ---
 
-## 🚀 Como Executar o Projeto
 
-Para baixar este projeto, abra o seu **Prompt de Comando (CMD)** e digite:
+## 🛠️ Para Desenvolvedores (Execução Local)
 
-`git clone https://github.com/salles1109-coder/catalog-api.git`
+Se você é um desenvolvedor e deseja testar este projeto localmente:
+
+1. Certifique-se de ter o **Java 21** e o **Git** instalados.
+2. Clone o repositório:
+   `git clone https://github.com/salles1109-coder/catalog-api.git`
+3. Entre na pasta e execute:
+   `./mvnw spring-boot:run`
+4. Acesse: `http://localhost:8080/index.html`
