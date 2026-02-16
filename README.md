@@ -1,49 +1,218 @@
-# 📦 Catálogo de Produtos Full Stack
+🛒 Catalog API - Spring Boot
 
-Sistema completo de gerenciamento de produtos com backend em **Spring Boot 3** e interface moderna em **Tailwind CSS**.
-
----
-
-## 📸 Preview do Sistema
-O sistema possui integração total entre API e Frontend, com controle de acesso por nível de usuário.
-
-<img src="https://github.com/user-attachments/assets/8138639b-550d-4c48-8fb9-03029f96cae5" width="100%" alt="Screenshot do Catálogo">
+API REST completa para gerenciamento de catálogo de produtos, com autenticação JWT e interface web integrada.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+🚀 Tecnologias utilizadas
 
-### **Backend**
-* **Linguagem:** Java 21
-* **Framework:** Spring Boot 3
-* **Segurança:** Spring Security & JWT (JSON Web Token)
-* **Gerenciador:** Maven
-* **Documentação:** Swagger (OpenAPI 3)
-
-### **Frontend**
-* **Estilização:** Tailwind CSS
-* **Lógica:** JavaScript (Fetch API)
-* **Estrutura:** HTML5
+- Java 21
+- Spring Boot
+- Spring Security
+- JWT Authentication
+- Maven
+- HTML, CSS, JavaScript
+- H2 Database (em memória)
 
 ---
 
-## ✨ Funcionalidades
+🔐 Autenticação
 
-- [x] **Autenticação:** Login seguro via Token JWT.
-- [x] **Listagem:** Visualização em tempo real dos produtos cadastrados.
-- [x] **Gestão de Produtos:** Cadastro, edição e exclusão (CRUD).
-- [x] **Segurança:** Regras de acesso onde apenas **ADMIN** pode alterar dados.
+A API utiliza autenticação via JWT Token.
+
+Login
+
+Endpoint
+
+POST /auth/login
+
+Body
+
+{
+  "username": "admin",
+  "password": "123"
+}
+
+Resposta
+
+{
+  "token": "SEU_TOKEN_JWT"
+}
+
+Use o token nas próximas requisições:
+
+Authorization: Bearer SEU_TOKEN
 
 ---
 
+📦 Endpoints de Produtos
 
-## 🛠️ Para Desenvolvedores (Execução Local)
+Listar todos produtos
 
-Se você é um desenvolvedor e deseja testar este projeto localmente:
+GET /products
 
-1. Certifique-se de ter o **Java 21** e o **Git** instalados.
-2. Clone o repositório:
-   `git clone https://github.com/salles1109-coder/catalog-api.git`
-3. Entre na pasta e execute:
-   `./mvnw spring-boot:run`
-4. Acesse: `http://localhost:8080/index.html`
+Resposta:
+
+[
+  {
+    "id": 1,
+    "name": "Mouse",
+    "price": 50.00
+  }
+]
+
+---
+
+Buscar produto por ID
+
+GET /products/{id}
+
+Exemplo:
+
+GET /products/1
+
+---
+
+Criar produto
+
+POST /products
+
+Body:
+
+{
+  "name": "Teclado",
+  "price": 99.90
+}
+
+---
+
+Atualizar produto
+
+PUT /products/{id}
+
+Body:
+
+{
+  "name": "Teclado Gamer",
+  "price": 199.90
+}
+
+---
+
+Deletar produto
+
+DELETE /products/{id}
+
+---
+
+🌐 Interface Web
+
+O projeto possui interface web integrada.
+
+Acesse:
+
+http://localhost:8080/index.html
+
+Funcionalidades:
+
+- Login
+- Criar produto
+- Listar produtos
+- Buscar produtos
+- Deletar produtos
+
+---
+
+🧪 Swagger (Documentação interativa)
+
+Acesse:
+
+http://localhost:8080/swagger-ui/index.html
+
+---
+
+⚙️ Como executar o projeto
+
+Requisitos
+
+- Java 21
+- Git
+
+---
+
+Clone o projeto
+
+git clone https://github.com/salles1109-coder/catalog-api.git
+
+---
+
+Execute
+
+Linux / Mac:
+
+./mvnw spring-boot:run
+
+Windows:
+
+mvnw.cmd spring-boot:run
+
+---
+
+Acesse
+
+http://localhost:8080/index.html
+
+---
+
+👤 Usuário padrão
+
+username: admin
+password: 123
+
+---
+
+🔒 Segurança
+
+- Autenticação JWT
+- Rotas protegidas
+- Apenas ADMIN pode alterar dados
+
+---
+
+📁 Estrutura
+
+controller
+service
+repository
+dto
+security
+
+---
+
+📌 Status do Projeto
+
+✅ Completo
+✅ Funcional
+✅ Pronto para produção (com ajustes)
+
+---
+
+👨‍💻 Autor
+
+Vinicius Sales
+
+GitHub:
+
+https://github.com/salles1109-coder
+
+---
+
+⭐ Objetivo
+
+Projeto desenvolvido para estudo e demonstração de conhecimentos em:
+
+- Backend Java
+- Spring Boot
+- APIs REST
+- Segurança
+- Integração Frontend
