@@ -1,35 +1,43 @@
-# API de Catálogo
+# 📦 Catálogo de Produtos Full Stack
 
-API REST desenvolvida com Spring Boot.
+Sistema completo de gerenciamento de produtos com backend em **Spring Boot 3** e interface moderna em **Tailwind CSS**.
 
-## Tecnologias utilizadas
+---
 
-- Java 17
-- Spring Boot
-- Spring Security
-- JWT
-- Maven
-- Swagger (OpenAPI)
+## 📸 Preview do Sistema
+O sistema possui integração total entre API e Frontend, com controle de acesso por nível de usuário.
 
-## Funcionalidades
+<img src="https://github.com/user-attachments/assets/8138639b-550d-4c48-8fb9-03029f96cae5" width="100%" alt="Screenshot do Catálogo">
 
-- Cadastro de produtos
-- Listagem de produtos
-- Atualização de produtos
-- Remoção de produtos
-- Autenticação com JWT
+---
 
-## Como executar o projeto
+## 🛠️ Tecnologias Utilizadas
 
-1. Clone o repositório
-2. Execute:
+### **Backend**
+* **Linguagem:** Java 21
+* **Framework:** Spring Boot 3
+* **Segurança:** Spring Security & JWT (JSON Web Token)
+* **Gerenciador:** Maven
+* **Documentação:** Swagger (OpenAPI 3)
 
-./mvnw spring-boot:run
+### **Frontend**
+* **Estilização:** Tailwind CSS
+* **Lógica:** JavaScript (Fetch API)
+* **Estrutura:** HTML5
 
-A aplicação irá iniciar em:
+---
 
-http://localhost:8080
+## ✨ Funcionalidades
 
-## Documentação Swagger
+- [x] **Autenticação:** Login seguro via Token JWT.
+- [x] **Listagem:** Visualização em tempo real dos produtos cadastrados.
+- [x] **Gestão de Produtos:** Cadastro, edição e exclusão (CRUD).
+- [x] **Segurança:** Regras de acesso onde apenas **ADMIN** pode alterar dados.
 
-http://localhost:8080/swagger-ui.html
+---
+
+## 🚀 Como Executar o Projeto
+
+Para baixar este projeto, abra o seu **Prompt de Comando (CMD)** e digite:
+
+`git clone https://github.com/salles1109-coder/catalog-api.git`
