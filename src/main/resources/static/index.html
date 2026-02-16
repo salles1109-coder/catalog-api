@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Profissional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        
+        <div id="login-area" class="mb-8 p-4 border-l-4 border-blue-500 bg-blue-50 rounded">
+            <h2 class="text-lg font-bold mb-3 text-blue-800">Acesso ao Sistema</h2>
+            <div class="flex gap-2">
+                <input type="text" id="username" placeholder="Usuário" class="border p-2 rounded w-full">
+                <input type="password" id="password" placeholder="Senha" class="border p-2 rounded w-full">
+                <button onclick="fazerLogin()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">Entrar</button>
+            </div>
+            <p id="login-msg" class="text-sm mt-2 text-gray-600 font-medium"></p>
+        </div>
+
+        <div class="mb-8 p-4 border border-gray-200 rounded-lg bg-gray-50">
+            <h2 class="text-lg font-bold mb-3 text-gray-700">🆕 Novo Produto</h2>
+            <div class="flex gap-2">
+                <input type="text" id="new-name" placeholder="Nome do Produto" class="border p-2 rounded w-full">
+                <input type="number" id="new-price" placeholder="Preço" class="border p-2 rounded w-32">
+                <button onclick="cadastrarProduto()" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Salvar</button>
+            </div>
+        </div>
+
+        <hr class="mb-8">
+
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">📦 Meu Catálogo</h1>
+            <div class="flex gap-2">
+                <input type="text" id="search-id" placeholder="Buscar por ID..." class="border p-2 rounded text-sm w-40">
+                <button onclick="buscarPorId()" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">Buscar</button>
+                <button onclick="carregarProdutos()" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Ver Todos</button>
+            </div>
+        </div>
+
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="border-b-2 border-gray-200">
+                    <th class="py-3 px-2">ID</th>
+                    <th class="py-3 px-2">Nome</th>
+                    <th class="py-3 px-2">Preço</th>
+                    <th class="py-3 px-2 text-right">Ações</th>
+                </tr>
+            </thead>
+            <tbody id="tabela-produtos"></tbody>
+        </table>
+    </div>
+
+    <script>
+        let tokenJwt = "";
+
+        // --- LOGIN ---
+        async function fazerLogin() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const msg = document.getElementById('login-msg');
+
+            try {
+                const response = await fetch('http://localhost:8080/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user, password: pass })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    tokenJwt = data.token; 
+                    msg.innerText = "✅ Logado como " + user;
+                    msg.className = "text-sm mt-2 text-green-600 font-medium";
+                    carregarProdutos(); 
+                } else {
+                    msg.innerText = "❌ Senha incorreta.";
+                    msg.className = "text-sm mt-2 text-red-600 font-medium";
+                }
+            } catch (error) {
+                msg.innerText = "❌ Erro ao conectar.";
+            }
+        }
+
+        // --- LISTAR ---
+        async function carregarProdutos() {
+            const container = document.getElementById('tabela-produtos');
+            container.innerHTML = "Carregando...";
+
+            try {
+                const response = await fetch('http://localhost:8080/products', {
+                    headers: { 'Authorization': 'Bearer ' + tokenJwt }
+                });
+
+                if (!response.ok) throw new Error();
+
+                const produtos = await response.json();
+                renderizarTabela(produtos);
+            } catch (error) {
+                container.innerHTML = "<tr><td colspan='4' class='text-red-500 p-4'>Erro ao carregar ou sem acesso.</td></tr>";
+            }
+        }
+
+        // --- CADASTRAR (POST) ---
+        async function cadastrarProduto() {
+            const name = document.getElementById('new-name').value;
+            const price = document.getElementById('new-price').value;
+
+            try {
+                const response = await fetch('http://localhost:8080/products', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + tokenJwt 
+                    },
+                    body: JSON.stringify({ name: name, price: parseFloat(price) })
+                });
+
+                if (response.ok) {
+                    alert("Produto salvo!");
+                    carregarProdutos(); // Atualiza a lista
+                } else {
+                    alert("Erro ao cadastrar. Verifique se você é ADMIN.");
+                }
+            } catch (error) {
+                alert("Erro de conexão.");
+            }
+        }
+
+        // --- DELETAR (DELETE) ---
+        async function deletarProduto(id) {
+            if (!confirm("Deseja excluir o produto " + id + "?")) return;
+
+            try {
+                const response = await fetch(`http://localhost:8080/products/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': 'Bearer ' + tokenJwt }
+                });
+
+                if (response.ok) {
+                    carregarProdutos();
+                } else {
+                    alert("Erro ao deletar. Apenas ADMIN pode excluir.");
+                }
+            } catch (error) {
+                alert("Erro ao deletar.");
+            }
+        }
+
+        // --- BUSCAR POR ID ---
+        async function buscarPorId() {
+            const id = document.getElementById('search-id').value;
+            if (!id) return;
+
+            try {
+                const response = await fetch(`http://localhost:8080/products/${id}`, {
+                    headers: { 'Authorization': 'Bearer ' + tokenJwt }
+                });
+
+                if (response.ok) {
+                    const produto = await response.json();
+                    renderizarTabela([produto]); // Mostra só o encontrado
+                } else {
+                    alert("Produto não encontrado!");
+                }
+            } catch (error) {
+                alert("Erro na busca.");
+            }
+        }
+
+        // Função auxiliar para desenhar a tabela
+        function renderizarTabela(lista) {
+            const container = document.getElementById('tabela-produtos');
+            container.innerHTML = "";
+            lista.forEach(p => {
+                container.innerHTML += `
+                    <tr class="border-b hover:bg-gray-50 transition">
+                        <td class="py-3 px-2 text-gray-500">#${p.id}</td>
+                        <td class="py-3 px-2 font-medium">${p.name || p.nome}</td>
+                        <td class="py-3 px-2 text-green-600">R$ ${p.price.toFixed(2)}</td>
+                        <td class="py-3 px-2 text-right">
+                            <button onclick="deletarProduto(${p.id})" class="text-red-500 hover:text-red-700 font-bold">🗑️ Excluir</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
